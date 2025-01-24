@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f2f5;
+        }
+        .login-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        input {
+            display: block;
+            margin: 10px 0;
+            padding: 8px;
+            width: 250px;
+        }
+        button {
+            background-color: #1877f2;
+            color: white;
+            border: none;
+            padding: 10px;
+            width: 100%;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #166fe5;
+        }
+    </style>
+    <script>
+        if (sessionStorage.getItem('authToken')) {
+            window.location.href = '/dev/nocodb/dashboard/main/';
+        }
+    </script>
+</head>
+<body>
+    <div class="login-container">
+        <h2>Login</h2>
+        <form id="loginForm" onsubmit="handleLogin(event)">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+            <br>
+            <label for="pwd">Password:</label>
+            <input type="password" id="pwd" name="pwd" required>
+            <br>
+            <button type="submit">Login</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('pwd').value;
+            const encodedPassword = btoa(password);
+
+            try {
+                const response = await fetch('https://app.nocodb.com/api/v2/tables/mw0jvk8io3p08bk/records?viewId=vwktgyzejf0mnxsl&limit=25&shuffle=0&offset=0', {
+                    method: 'GET',
+                    headers: {
+                        'xc-token': 'ACOP2g7fcdjz6sBWRDxNmbDX1GfTuha4bahn_YZi'
+                    }
+                });
+
+                const data = await response.json();
+                const user = data.list.find(u => 
+                    u.email === email && u.pwd === encodedPassword
+                );
+
+                if (!user) {
+                    alert('Invalid email or password');
+                    return;
+                }
+
+                // Login successful
+                const userToStore = {
+                    Id: user.Id,
+                    email: user.email
+                };
+                
+                localStorage.setItem('user', JSON.stringify(userToStore));
+                sessionStorage.setItem('authToken', 'logged-in');
+                window.location.href = '/dev/nocodb/dashboard/main/';
+
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred. Please try again later.');
+            }
+        });
+    </script>
+</body>
+</html>
