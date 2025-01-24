@@ -4,8 +4,8 @@ function handleLogout() {
     sessionStorage.removeItem('authToken');
     
     // Clear browser history
-    history.replaceState(null, null, '/dev/nocodb/');
-    window.location.href = '/dev/nocodb/';
+    history.replaceState(null, null, '/');
+    window.location.href = '/';
 }
 
 (async function loadGlobalMenu() {
@@ -29,6 +29,20 @@ function handleLogout() {
         link.classList.remove('text-gray-600');
       }
     });
+    
+    // Add username display logic after menu is loaded
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    console.log('User data:', user); // Debug log
+    if (user.displayName) {
+        const displayElement = document.getElementById('userDisplayName');
+        if (displayElement) {
+            displayElement.textContent = user.displayName;
+        } else {
+            console.error('userDisplayName element not found');
+        }
+    } else {
+        console.error('No displayName in user data');
+    }
     
   } catch (error) {
     console.error('Error loading global menu:', error);

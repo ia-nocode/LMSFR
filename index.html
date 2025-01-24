@@ -41,7 +41,7 @@
     </style>
     <script>
         if (sessionStorage.getItem('authToken')) {
-            window.location.href = '/dev/nocodb/dashboard/main/';
+            window.location.href = './dashboard/main/';
         }
     </script>
 </head>
@@ -88,12 +88,13 @@
                 // Login successful
                 const userToStore = {
                     Id: user.Id,
-                    email: user.email
+                    email: user.email,
+                    displayName: `${user.firstName} ${user.lastName.charAt(0)}.`
                 };
                 
                 localStorage.setItem('user', JSON.stringify(userToStore));
                 sessionStorage.setItem('authToken', 'logged-in');
-                window.location.href = '/dev/nocodb/dashboard/main/';
+                window.location.href = './dashboard/main/';
 
             } catch (error) {
                 console.error('Error:', error);
