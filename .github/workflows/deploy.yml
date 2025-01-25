@@ -13,9 +13,9 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Replace xc-token with secret
+    - name: Replace API key placeholder
       run: |
-        sed -i 's/ACOP2g7fcdjz6sBWRDxNmbDX1GfTuha4bahn_YZi/${{ secrets.NOCODB_APIKEY }}/g' index.html
+        sed -i 's/__NOCODB_API_KEY__/${{ secrets.NOCODB_APIKEY }}/g' index.html
 
     - name: Deploy to server
       run: |
