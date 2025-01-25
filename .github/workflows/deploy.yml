@@ -1,0 +1,23 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Replace xc-token with secret
+      run: |
+        sed -i 's/ACOP2g7fcdjz6sBWRDxNmbDX1GfTuha4bahn_YZi/${{ secrets.NOCODB_APIKEY }}/g' /Users/andreroussille/Documents/github/ianocode/LMSFR/index.html
+
+    - name: Deploy to server
+      run: |
+        # Add your deployment script here
+        echo "Deploying..."
